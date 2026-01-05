@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTV Prediction Analysis - Probabilistic Models — Hanna Todorova</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            display: inline-block;
+            margin: 10px 20px 10px 0;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+        .metric-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .metric-value {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-top: 5px;
+        }
+        .quality-excellent {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .quality-good {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .quality-fair {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .quality-poor {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .method-box {
+            background-color: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .formula {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 LTV Prediction Analysis - Probabilistic Models — Hanna Todorova</h1>
+        <p><strong>Дата аналізу:</strong> 2026-01-04 14:23:17</p>
+        
+        <div class="warning-box">
+            <h4>🎯 Ймовірнісний підхід до прогнозування LTV</h4>
+            <p>Ця модель використовує <strong>sBG (Shifted Beta-Geometric)</strong> для retention та <strong>Gamma/BdW</strong> для монетизації:</p>
+            
+            <function_calls>
+            <invoke name="artifacts">
+            <parameter name="command">update</parameter>
+            <parameter name="id">ltv_prediction_analysis</parameter>
+            <parameter name="new_str">            <ul>
+            <li><strong>sBG модель</strong> - моделює ймовірність churn кожного тижня</li>
+            <li><strong>Gamma/BdW</strong> - враховує зменшення витрат активних користувачів</li>
+            <li><strong>Реалістичний прогноз</strong> - LTV виходить на плато через churn</li>
+            <li><strong>Математично обґрунтовано</strong> - базується на теорії ймовірностей</li>
+            </ul>
+        </div>
+   
+   <h2>1. Загальна інформація про дані</h2>
+    <div class="metric">
+        <div class="metric-label">Транзакцій</div>
+        <div class="metric-value">6,086</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Користувачів</div>
+        <div class="metric-value">934</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Когорт</div>
+        <div class="metric-value">32</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Макс lifetime</div>
+        <div class="metric-value">32 тижнів</div>
+    </div>
+    
+    <h2>2. Ймовірнісні моделі</h2>
+    <div class="method-box">
+        <h3>🔬 Модель 1: sBG (Shifted Beta-Geometric)</h3>
+        <div class="formula">
+        
+        P(активний на тижні t) = Beta(α, β + t) / Beta(α, β)
+        </div>
+        <p><strong>Призначення:</strong> Моделювання retention та churn</p>
+        <ul>
+        <li><strong>α</strong> - параметр "липкості" продукту (вищий = краща retention)</li>
+        <li><strong>β</strong> - параметр churn rate (нижчий = менший churn)</li>
+        <li>Модель передбачає ймовірність того, що користувач залишиться активним</li>
+        </ul>
+        
+         <h3>🔬 Модель 2: Gamma/BdW для монетизації</h3>
+        <div class="formula">
+        
+        Revenue_per_period(t) = scale × (α_rev / (α_rev + t))
+        </div>
+        <p><strong>Призначення:</strong> Моделювання витрат активних користувачів</p>
+        <ul>
+        <li><strong>scale</strong> - базовий рівень витрат</li>
+        <li><strong>α_rev</strong> - швидкість зменшення витрат з часом</li>
+        <li>Враховує, що активні користувачі витрачають менше з часом</li>
+        </ul>
+        
+         <h3>📐 Фінальний LTV</h3>
+        <div class="formula">
+        
+        LTV(t) = Σ [Retention(i) × Revenue_per_active(i)] для i = 0..t
+        </div>
+    </div>
+        
+         <h3>Параметри моделей (приклади)</h3>
+    <table>
+        <tr>
+            <th>Когорта</th>
+            <th>α (retention)</th>
+            <th>β (churn)</th>
+            <th>α_rev</th>
+            <th>scale ($)</th>
+        </tr>
+        
+
+<tr>
+<td>2023-03-19</td>
+<td>0.627</td>
+<td>0.913</td>
+<td>5.000</td>
+<td>$5.42</td>
+</tr>
+
+<tr>
+<td>2023-05-14</td>
+<td>0.493</td>
+<td>0.722</td>
+<td>5.000</td>
+<td>$4.94</td>
+</tr>
+
+<tr>
+<td>2023-06-11</td>
+<td>0.605</td>
+<td>1.387</td>
+<td>5.000</td>
+<td>$4.60</td>
+</tr>
+
+<tr>
+<td>2023-07-09</td>
+<td>0.277</td>
+<td>0.267</td>
+<td>5.000</td>
+<td>$4.08</td>
+</tr>
+
+<tr>
+<td>2023-06-04</td>
+<td>0.713</td>
+<td>2.657</td>
+<td>5.000</td>
+<td>$4.71</td>
+</tr>
+
+<tr>
+<td>2023-05-21</td>
+<td>0.635</td>
+<td>1.234</td>
+<td>5.000</td>
+<td>$4.81</td>
+</tr>
+
+<tr>
+<td>2023-04-23</td>
+<td>0.796</td>
+<td>1.056</td>
+<td>5.000</td>
+<td>$5.09</td>
+</tr>
+
+<tr>
+<td>2023-03-26</td>
+<td>0.767</td>
+<td>1.728</td>
+<td>5.000</td>
+<td>$5.42</td>
+</tr>
+
+<tr>
+<td>2023-03-05</td>
+<td>0.858</td>
+<td>1.846</td>
+<td>5.000</td>
+<td>$5.59</td>
+</tr>
+
+<tr>
+<td>2023-04-09</td>
+<td>0.431</td>
+<td>0.643</td>
+<td>5.000</td>
+<td>$5.32</td>
+</tr>
+
+</table>
+        
+         <h2>3. Якість моделі</h2>
+    <table>
+        <tr>
+            <th>Метрика</th>
+            <th>Значення</th>
+            <th>Опис</th>
+        </tr>
+        <tr>
+            <td><strong>R² Score</strong></td>
+            <td class="quality-poor">0.5461</td>
+            <td>Коефіцієнт детермінації</td>
+        </tr>
+        <tr>
+            <td><strong>MAE</strong></td>
+            <td>$2.74</td>
+            <td>Середня абсолютна помилка</td>
+        </tr>
+        <tr>
+            <td><strong>RMSE</strong></td>
+            <td>$3.09</td>
+            <td>Корінь середньоквадратичної помилки</td>
+        </tr>
+        <tr>
+            <td><strong>MAPE</strong></td>
+            <td>32.54%</td>
+            <td>Середня абсолютна процентна помилка</td>
+        </tr>
+    </table>
+    
+    <div class="info-box">
+        <h4 class="quality-poor">✓ НИЗЬКА ЯКІСТЬ МОДЕЛІ (R² = 0.5461)</h4>
+        <p>Модель пояснює 54.6% варіації в даних LTV.</p>
+    </div>
+    
+    <h2>4. Прогноз LTV на 52 тижні</h2>
+    <div class="metric">
+        <div class="metric-label">Середній LTV (52 тижні)</div>
+        <div class="metric-value">$17.76</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Медіанний LTV</div>
+        <div class="metric-value">$19.23</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Діапазон LTV</div>
+        <div class="metric-value">$7.71 - $23.42</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Середній retention (52 тижні)</div>
+        <div class="metric-value">9.0%</div>
+    </div>
+    <div class="metric">
+        <div class="metric-label">Прогнозний сукупний дохід</div>
+        <div class="metric-value">$17,723</div>
+    </div>
+
+<div class="info-box">
+<h4>📊 Порівняння з фактичними даними</h4>
+<p><strong>Останній фактичний LTV (тиждень 16):</strong> $14.17</p>
+<p><strong>Прогноз на 52 тижні:</strong> $17.76</p>
+<p><strong>Очікуваний приріст:</strong> $3.59 
+(<span class="highlight">+25.3%</span>)</p>
+<br>
+<p><strong>Пояснення прогнозу:</strong></p>
+<ul>
+<li>Retention зараз: 15.3% → Прогноз: 9.0%</li>
+<li>Модель враховує природний churn користувачів</li>
+<li>LTV зростає повільно через зменшення активних користувачів</li>
+<li>Ймовірнісна модель дає реалістичний прогноз без завищень</li>
+</ul>
+</div>
+
+
+<h3>Прогноз по когортах (52 тижні)</h3>
+<table>
+<tr>
+<th>Когорта</th>
+<th>Розмір</th>
+<th>LTV (52 тижні)</th>
+<th>Retention (52 тижні)</th>
+<th>Сукупний revenue</th>
+</tr>
+
+
+<tr>
+<td>2023-02-26</td>
+<td>20</td>
+<td>$22.56</td>
+<td>8.6%</td>
+<td>$451</td>
+</tr>
+
+<tr>
+<td>2023-03-05</td>
+<td>88</td>
+<td>$20.86</td>
+<td>5.4%</td>
+<td>$1,836</td>
+</tr>
+
+<tr>
+<td>2023-03-12</td>
+<td>69</td>
+<td>$20.26</td>
+<td>6.6%</td>
+<td>$1,398</td>
+</tr>
+
+<tr>
+<td>2023-03-19</td>
+<td>84</td>
+<td>$19.23</td>
+<td>7.0%</td>
+<td>$1,615</td>
+</tr>
+
+<tr>
+<td>2023-03-26</td>
+<td>50</td>
+<td>$21.44</td>
+<td>6.8%</td>
+<td>$1,072</td>
+</tr>
+
+<tr>
+<td>2023-04-02</td>
+<td>36</td>
+<td>$19.73</td>
+<td>6.3%</td>
+<td>$710</td>
+</tr>
+
+<tr>
+<td>2023-04-09</td>
+<td>43</td>
+<td>$22.13</td>
+<td>12.5%</td>
+<td>$952</td>
+</tr>
+
+<tr>
+<td>2023-04-16</td>
+<td>56</td>
+<td>$15.39</td>
+<td>2.9%</td>
+<td>$862</td>
+</tr>
+
+<tr>
+<td>2023-04-23</td>
+<td>67</td>
+<td>$15.77</td>
+<td>4.1%</td>
+<td>$1,057</td>
+</tr>
+
+<tr>
+<td>2023-04-30</td>
+<td>68</td>
+<td>$20.09</td>
+<td>6.8%</td>
+<td>$1,366</td>
+</tr>
+
+<tr>
+<td>2023-05-07</td>
+<td>66</td>
+<td>$19.30</td>
+<td>9.8%</td>
+<td>$1,274</td>
+</tr>
+
+<tr>
+<td>2023-05-14</td>
+<td>81</td>
+<td>$19.33</td>
+<td>10.3%</td>
+<td>$1,566</td>
+</tr>
+
+<tr>
+<td>2023-05-21</td>
+<td>55</td>
+<td>$19.17</td>
+<td>8.4%</td>
+<td>$1,054</td>
+</tr>
+
+<tr>
+<td>2023-05-28</td>
+<td>32</td>
+<td>$14.20</td>
+<td>3.1%</td>
+<td>$454</td>
+</tr>
+
+<tr>
+<td>2023-06-04</td>
+<td>40</td>
+<td>$23.42</td>
+<td>11.2%</td>
+<td>$937</td>
+</tr>
+
+</table>
+    
+     <h2>5. Візуалізація</h2>
+    <img src="ltv_analysis_charts.png" alt="LTV Analysis Charts">
+    
+    <h2>6. Висновки та рекомендації</h2>
+    <div class="info-box">
+        <h4>🎓 Ключові висновки:</h4>
+        <ul>
+            <li>Використано <strong>ймовірнісні моделі sBG + Gamma/BdW</strong> для реалістичного прогнозу</li>
+            <li>Модель досягла якості <strong>R² = 0.5461</strong></li>
+            <li>Прогнозний LTV на рік: <strong>$17.76</strong></li>
+            <li>Очікуваний retention через рік: <strong>9.0%</strong></li>
+            <li>Прогнозний сукупний дохід: <strong>$17,723</strong></li>
+        </ul>
+        
+        <h4>💡 Рекомендації для покращення бізнесу:</h4>
+        <ul>
+            <li><strong>Покращити retention:</strong> Знизити churn через onboarding, engagement features</li>
+            <li><strong>Збільшити ARPU:</strong> Upselling, premium features, персоналізація</li>
+            <li><strong>Сегментація:</strong> Будувати окремі моделі для high-value сегментів</li>
+            <li><strong>Моніторинг:</strong> Відстежувати retention та LTV по когортах щотижня</li>
+            <li><strong>Експерименти:</strong> A/B тести для покращення retention на ранніх тижнях</li>
+        </ul>
+    </div>
+    
+    <div class="warning-box">
+        <h4>⚠️ Обмеження моделі</h4>
+        <ul>
+            <li>Модель передбачає стабільність продукту (без великих змін)</li>
+            <li>Не враховує сезонність та зовнішні фактори</li>
+            <li>Точність знижується для дуже віддалених прогнозів (>1 року)</li>
+            <li>Рекомендується оновлювати модель щомісяця з новими даними</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

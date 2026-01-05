@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Test Analysis Report (Mobile App) — Hanna Todorova</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            display: inline-block;
+            margin: 10px 20px 10px 0;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+        .metric-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .metric-value {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-top: 5px;
+        }
+        .significant {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .not-significant {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .winner {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .summary-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .validity-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .status-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>📊 A/B Test Analysis Report (Mobile App) — Hanna Todorova</h1>
+        <p><strong>Дата аналізу:</strong> 2026-01-04 14:21:51</p>
+        
+        <h2>🔍 Валідність та надійність даних</h2>
+        
+        <h3>📅 Тривалість тесту</h3>
+        <div class="metric">
+            <div class="metric-label">Початок тесту</div>
+            <div class="metric-value">2023-06-01</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Кінець тесту</div>
+            <div class="metric-value">2023-06-07</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Тривалість</div>
+            <div class="metric-value">7 днів</div>
+        </div>
+
+        <div class="info-box">
+            <span class="status-icon">⚠️</span>
+            <strong>ПОПЕРЕДЖЕННЯ: Тест триває менше 2 тижнів</strong><br>
+            Рекомендація: бажано продовжити до 2-4 тижнів
+        </div>
+
+        <h3>📊 Розмір вибірки</h3>
+        <div class="metric">
+            <div class="metric-label">Група control</div>
+            <div class="metric-value">7,627</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Група treatment</div>
+            <div class="metric-value">7,658</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Співвідношення груп</div>
+            <div class="metric-value">1.00</div>
+        </div>
+
+        <div class="validity-box">
+            <span class="status-icon">❌</span>
+            <strong>Вибірка замала — високий ризик не виявити ефект</strong>
+        </div>
+
+        <div class="validity-box">
+            <span class="status-icon">✓</span>
+            <strong>ВІДМІННО: Групи збалансовані (різниця <10%)</strong>
+        </div>
+
+        <h2>1. Загальна інформація</h2>
+        <div class="metric">
+            <div class="metric-label">Загальна кількість користувачів</div>
+            <div class="metric-value">15,285</div>
+        </div>
+                       
+        <h2>2. Основні метрики по групах</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_users</th>
+      <th>trial</th>
+      <th>paid</th>
+      <th>revenue_1m</th>
+      <th>trial_rate</th>
+      <th>paid_rate</th>
+      <th>conversion_rate</th>
+      <th>arpu</th>
+      <th>arppu</th>
+    </tr>
+    <tr>
+      <th>test_group</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>control</th>
+      <td>7627</td>
+      <td>925</td>
+      <td>116</td>
+      <td>694.84</td>
+      <td>12.127966</td>
+      <td>1.520913</td>
+      <td>12.540541</td>
+      <td>0.091103</td>
+      <td>5.990000</td>
+    </tr>
+    <tr>
+      <th>treatment</th>
+      <td>7658</td>
+      <td>798</td>
+      <td>149</td>
+      <td>792.35</td>
+      <td>10.420475</td>
+      <td>1.945678</td>
+      <td>18.671679</td>
+      <td>0.103467</td>
+      <td>5.317785</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>3. Статистичні тести</h2>
+        
+        <div class="summary-box">
+            <h3>Переможець: <span class="winner">Група treatment</span></h3>
+        </div>
+        
+        <h3>Trial Rate</h3>
+        <table>
+            <tr>
+                <th>Група</th>
+                <th>Trial Rate</th>
+                <th>Chi-square</th>
+                <th>P-value</th>
+                <th>Значущість</th>
+            </tr>
+            <tr>
+                <td>control</td>
+                <td>12.13%</td>
+                <td rowspan="2">10.9688</td>
+                <td rowspan="2">0.0009</td>
+                <td rowspan="2" class="significant">
+                    ✓ ЗНАЧУЩИЙ
+                </td>
+            </tr>
+            <tr>
+                <td>treatment</td>
+                <td>10.42%</td>
+            </tr>
+        </table>
+        
+        <h3>Paid Rate</h3>
+        <table>
+            <tr>
+                <th>Група</th>
+                <th>Paid Rate</th>
+                <th>Chi-square</th>
+                <th>P-value</th>
+                <th>Значущість</th>
+            </tr>
+            <tr>
+                <td>control</td>
+                <td>1.52%</td>
+                <td rowspan="2">3.8014</td>
+                <td rowspan="2">0.0512</td>
+                <td rowspan="2" class="not-significant">
+                    ✗ НЕ ЗНАЧУЩИЙ
+                </td>
+            </tr>
+            <tr>
+                <td>treatment</td>
+                <td>1.95%</td>
+            </tr>
+        </table>
+        
+        <h3>Revenue (ARPU)</h3>
+        <table>
+            <tr>
+                <th>Група</th>
+                <th>ARPU</th>
+                <th>Mann-Whitney U</th>
+                <th>P-value</th>
+                <th>Значущість</th>
+            </tr>
+            <tr>
+                <td>control</td>
+                <td>$0.09</td>
+                <td rowspan="2">29084665.5000</td>
+                <td rowspan="2">0.0534</td>
+                <td rowspan="2" class="not-significant">
+                    ✗ НЕ ЗНАЧУЩИЙ
+                </td>
+            </tr>
+            <tr>
+                <td>treatment</td>
+                <td>$0.10</td>
+            </tr>
+        </table>
+
+        <h2>4. Аналіз по країнах</h2>
+        <h3>Частина 1: Trial Rate по країнах</h3>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>country</th>
+      <th>users</th>
+      <th>trial_rate_control</th>
+      <th>trial_rate_treatment</th>
+      <th>trial_p_value</th>
+      <th>trial_significant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CA</td>
+      <td>3895</td>
+      <td>11.311983</td>
+      <td>10.617662</td>
+      <td>0.520751</td>
+      <td>НІ</td>
+    </tr>
+    <tr>
+      <td>GB</td>
+      <td>3837</td>
+      <td>14.626219</td>
+      <td>10.497238</td>
+      <td>0.000135</td>
+      <td>ТАК</td>
+    </tr>
+    <tr>
+      <td>US</td>
+      <td>3790</td>
+      <td>10.850287</td>
+      <td>10.144154</td>
+      <td>0.511848</td>
+      <td>НІ</td>
+    </tr>
+    <tr>
+      <td>AU</td>
+      <td>3763</td>
+      <td>11.825726</td>
+      <td>10.408719</td>
+      <td>0.183714</td>
+      <td>НІ</td>
+    </tr>
+  </tbody>
+</table>
+        
+        <h3>Частина 2: Revenue по країнах</h3>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>country</th>
+      <th>paid_significant</th>
+      <th>arpu_control</th>
+      <th>arpu_treatment</th>
+      <th>revenue_p_value</th>
+      <th>revenue_significant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CA</td>
+      <td>ТАК</td>
+      <td>0.055692</td>
+      <td>0.094630</td>
+      <td>0.012181</td>
+      <td>ТАК</td>
+    </tr>
+    <tr>
+      <td>GB</td>
+      <td>НІ</td>
+      <td>0.113570</td>
+      <td>0.111130</td>
+      <td>0.747182</td>
+      <td>НІ</td>
+    </tr>
+    <tr>
+      <td>US</td>
+      <td>НІ</td>
+      <td>0.103114</td>
+      <td>0.094186</td>
+      <td>0.937384</td>
+      <td>НІ</td>
+    </tr>
+    <tr>
+      <td>AU</td>
+      <td>НІ</td>
+      <td>0.093205</td>
+      <td>0.114060</td>
+      <td>0.207615</td>
+      <td>НІ</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>5. Візуалізація</h2>
+        <img src="ab_test_charts.png" alt="A/B Test Charts">
+        
+        <h2>6. Висновки</h2>
+        <div class="summary-box">
+
+            <p><strong>Переможець за Paid Rate:</strong> Група treatment</p>
+            <p><strong>Статистична значущість:</strong></p>
+            <ul>
+                <li>Trial Rate: <span class="significant">ЗНАЧУЩИЙ</span></li>
+                <li>Paid Rate: <span class="not-significant">НЕ ЗНАЧУЩИЙ</span></li>
+                <li>Revenue: <span class="not-significant">НЕ ЗНАЧУЩИЙ</span></li>
+            </ul>
+<p><strong>Країни зі значущими відмінностями:</strong> CA</p>
+        </div>
+<style>
+.conclusion-box {
+    background-color: #e8f6ec;      /* світло-зелений фон */
+    border-left: 5px solid #2f8f46; /* товста зелена смуга зліва */
+    padding: 16px 18px;
+    margin-top: 16px;
+    font-size: 15px;
+}
+.conclusion-box h3 {
+    color: #2f8f46;
+    margin-top: 0;
+}
+</style>
+        <h2>7.Пропозиції</h2>
+        <div class="conclusion-box">
+
+
+          <p>
+            На основі отриманих результатів A/B-тесту рекомендовано провести
+            повторний експеримент, оскільки поточний тест не досягнув
+            статистичної значущості та міг мати недостатню статистичну потужність.
+          </p>
+
+      <ul>
+        <li>
+          Не зупиняти повторний тест раніше ніж через <strong>14 днів</strong>,
+          щоб покрити тижневу сезонність та поведінкові патерни користувачів.
+        </li>
+
+        <li>
+          Забезпечити <strong>пропорційний розподіл вибірки по країнах</strong>,
+          щоб уникнути перекосу структури користувачів між групами.
+        </li>
+
+        <li>
+          Цільовий розмір вибірки —
+          <strong>28 000 користувачів на кожну групу</strong>,
+          що забезпечить достатню статистичну потужність для виявлення
+          помірних ефектів.
+        </li>
+      </ul>
+
+      <p>
+        Після завершення періоду збору даних рекомендується повторно
+        перевірити статистичну значущість, величину ефекту та стабільність
+        метрик у динаміці.
+      </p>
+        </div>
+    </div>
+</body>
+</html>

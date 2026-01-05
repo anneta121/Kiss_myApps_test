@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTV Prediction Analysis - Shifted Gompertz — Hanna Todorova</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1400px; margin: 0 auto; background-color: white; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-left: 4px solid #3498db; padding-left: 10px; }
+        h3 { color: #34495e; margin-top: 20px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .metric { display: inline-block; margin: 10px 20px 10px 0; padding: 15px; background-color: #ecf0f1; border-radius: 5px; min-width: 200px; }
+        .metric-label { font-weight: bold; color: #7f8c8d; font-size: 14px; }
+        .metric-value { font-size: 24px; color: #2c3e50; margin-top: 5px; }
+        .quality-excellent { color: #27ae60; font-weight: bold; }
+        .quality-good { color: #2ecc71; font-weight: bold; }
+        .quality-fair { color: #f39c12; font-weight: bold; }
+        .quality-poor { color: #e74c3c; font-weight: bold; }
+        img { max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #ddd; }
+        .info-box { background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 20px 0; }
+        .method-box { background-color: #f3e5f5; border-left: 5px solid #9c27b0; padding: 15px; margin: 20px 0; }
+        .warning-box { background-color: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .formula { background-color: #f8f9fa; padding: 10px; border-radius: 5px; font-family: 'Courier New', monospace; font-size: 14px; margin: 10px 0; text-align: center; }
+        ul { line-height: 1.8; }
+        .highlight { background-color: #fff9c4; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 LTV Prediction Analysis - Shifted Gompertz Curve — Hanna Todorova</h1>
+        <p><strong>Дата аналізу:</strong> 2026-01-04 14:22:54</p>
+        
+        <div class="warning-box">
+            <h4>📈 Shifted Gompertz Curve для прогнозування LTV</h4>
+            <p>Ця модель передбачає:</p>
+            <ul>
+                <li><strong>S-подібну криву</strong> - швидке зростання на початку, потім уповільнення</li>
+                <li><strong>Вихід на плато</strong> - LTV стабілізується через churn</li>
+                <li><strong>Реалістичну поведінку</strong> - відображає справжні патерни retention</li>
+            </ul>
+        </div>
+        
+        <h2>1. Загальна інформація</h2>
+        <div class="metric">
+            <div class="metric-label">Транзакцій</div>
+            <div class="metric-value">6,086</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Користувачів</div>
+            <div class="metric-value">934</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Когорт</div>
+            <div class="metric-value">32</div>
+        </div>
+        
+        <h2>2. Метод прогнозування</h2>
+        <div class="method-box">
+            <h3>🔬 Shifted Gompertz Curve</h3>
+            <div class="formula">LTV(t) = a × (1 - e<sup>-b×t</sup>) × e<sup>-c×t</sup> + d</div>
+            <p><strong>Параметри моделі:</strong></p>
+            <ul>
+                <li><strong>a</strong> - максимальний потенційний LTV (плато)</li>
+                <li><strong>b</strong> - швидкість початкового зростання</li>
+                <li><strong>c</strong> - швидкість виходу на плато (churn rate)</li>
+                <li><strong>d</strong> - базове зміщення</li>
+            </ul>
+        </div>
+        
+        <h3>Параметри моделей по когортах (топ 10)</h3>
+        <table>
+            <tr>
+                <th>Когорта</th>
+                <th>a (плато)</th>
+                <th>b (зростання)</th>
+                <th>c (churn)</th>
+                <th>d (база)</th>
+            </tr>
+
+            <tr>
+                <td>2023-03-19</td>
+                <td>16.04</td>
+                <td>0.0639</td>
+                <td>0.0000</td>
+                <td>3.21</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-14</td>
+                <td>18.82</td>
+                <td>0.0605</td>
+                <td>0.0000</td>
+                <td>2.82</td>
+            </tr>
+
+            <tr>
+                <td>2023-06-11</td>
+                <td>2818.85</td>
+                <td>0.0005</td>
+                <td>0.0340</td>
+                <td>2.57</td>
+            </tr>
+
+            <tr>
+                <td>2023-07-09</td>
+                <td>543.29</td>
+                <td>0.0018</td>
+                <td>0.0113</td>
+                <td>2.59</td>
+            </tr>
+
+            <tr>
+                <td>2023-06-04</td>
+                <td>23.71</td>
+                <td>0.0680</td>
+                <td>0.0000</td>
+                <td>2.96</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-21</td>
+                <td>22.56</td>
+                <td>0.0575</td>
+                <td>0.0071</td>
+                <td>2.71</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-23</td>
+                <td>10.62</td>
+                <td>0.1086</td>
+                <td>0.0000</td>
+                <td>2.86</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-26</td>
+                <td>17.21</td>
+                <td>0.0827</td>
+                <td>0.0000</td>
+                <td>2.91</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-05</td>
+                <td>16.38</td>
+                <td>0.0755</td>
+                <td>0.0000</td>
+                <td>3.08</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-09</td>
+                <td>25.40</td>
+                <td>0.0418</td>
+                <td>0.0000</td>
+                <td>3.37</td>
+            </tr>
+
+        </table>
+        
+        <h2>3. Якість моделі</h2>
+        <table>
+            <tr>
+                <th>Метрика</th>
+                <th>Значення</th>
+                <th>Опис</th>
+            </tr>
+            <tr>
+                <td><strong>R² Score</strong></td>
+                <td class="quality-excellent">0.9984</td>
+                <td>Коефіцієнт детермінації</td>
+            </tr>
+            <tr>
+                <td><strong>MAE</strong></td>
+                <td>$0.13</td>
+                <td>Середня абсолютна помилка</td>
+            </tr>
+            <tr>
+                <td><strong>RMSE</strong></td>
+                <td>$0.18</td>
+                <td>Корінь середньоквадратичної помилки</td>
+            </tr>
+            <tr>
+                <td><strong>MAPE</strong></td>
+                <td>1.64%</td>
+                <td>Середня абсолютна процентна помилка</td>
+            </tr>
+        </table>
+        
+        <div class="info-box">
+            <h4 class="quality-excellent">✓ ВІДМІННА ЯКІСТЬ МОДЕЛІ (R² = 0.9984)</h4>
+            <p>Модель пояснює 99.8% варіації в даних LTV.</p>
+        </div>
+        
+        <h2>4. Прогноз LTV на 52 тижні</h2>
+        <div class="metric">
+            <div class="metric-label">Середній LTV (52 тижні)</div>
+            <div class="metric-value">$16.79</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Медіанний LTV</div>
+            <div class="metric-value">$18.08</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Діапазон LTV</div>
+            <div class="metric-value">$5.25 - $30.28</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Прогнозний сукупний дохід</div>
+            <div class="metric-value">$16,680</div>
+        </div>
+
+        <div class="info-box">
+            <h4>📊 Порівняння з фактичними даними</h4>
+            <p><strong>Останній фактичний LTV (тиждень 16):</strong> $14.17</p>
+            <p><strong>Прогноз на 52 тижні:</strong> $16.79</p>
+            <p><strong>Очікуваний приріст:</strong> $2.63 (<span class="highlight">+18.5%</span>)</p>
+            <p><strong>Інтерпретація:</strong> Модель передбачає вихід на плато</p>
+        </div>
+
+        <h3>Прогноз по когортах (52 тижні)</h3>
+        <table>
+            <tr>
+                <th>Когорта</th>
+                <th>Розмір</th>
+                <th>LTV (52 тижні)</th>
+                <th>Сукупний revenue</th>
+            </tr>
+
+            <tr>
+                <td>2023-02-26</td>
+                <td>20</td>
+                <td>$22.98</td>
+                <td>$460</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-05</td>
+                <td>88</td>
+                <td>$19.14</td>
+                <td>$1,685</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-12</td>
+                <td>69</td>
+                <td>$18.99</td>
+                <td>$1,311</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-19</td>
+                <td>84</td>
+                <td>$18.67</td>
+                <td>$1,568</td>
+            </tr>
+
+            <tr>
+                <td>2023-03-26</td>
+                <td>50</td>
+                <td>$19.89</td>
+                <td>$994</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-02</td>
+                <td>36</td>
+                <td>$16.49</td>
+                <td>$594</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-09</td>
+                <td>43</td>
+                <td>$25.88</td>
+                <td>$1,113</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-16</td>
+                <td>56</td>
+                <td>$12.59</td>
+                <td>$705</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-23</td>
+                <td>67</td>
+                <td>$13.44</td>
+                <td>$901</td>
+            </tr>
+
+            <tr>
+                <td>2023-04-30</td>
+                <td>68</td>
+                <td>$17.41</td>
+                <td>$1,184</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-07</td>
+                <td>66</td>
+                <td>$20.17</td>
+                <td>$1,331</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-14</td>
+                <td>81</td>
+                <td>$20.84</td>
+                <td>$1,688</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-21</td>
+                <td>55</td>
+                <td>$17.50</td>
+                <td>$962</td>
+            </tr>
+
+            <tr>
+                <td>2023-05-28</td>
+                <td>32</td>
+                <td>$12.02</td>
+                <td>$385</td>
+            </tr>
+
+            <tr>
+                <td>2023-06-04</td>
+                <td>40</td>
+                <td>$25.98</td>
+                <td>$1,039</td>
+            </tr>
+
+        </table>
+        
+        <h2>5. Візуалізація</h2>
+        <img src="ltv_analysis_charts.png" alt="LTV Analysis Charts">
+        
+        <h2>6. Висновки</h2>
+        <div class="info-box">
+            <h4>🎓 Ключові висновки:</h4>
+            <ul>
+                <li>Модель <strong>Shifted Gompertz Curve</strong> досягла якості R² = 0.9984</li>
+                <li>Прогнозний LTV на рік: <strong>$16.79</strong></li>
+                <li>Прогнозний сукупний дохід: <strong>$16,680</strong></li>
+                <li>Модель враховує природний churn та вихід на плато</li>
+            </ul>
+            
+            <h4>💡 Рекомендації:</h4>
+            <ul>
+                <li><strong>Покращити retention</strong> на ранніх тижнях через onboarding</li>
+                <li><strong>Збільшити ARPU</strong> через upselling та premium features</li>
+                <li><strong>Сегментація</strong> - окремі моделі для різних сегментів</li>
+                <li><strong>Моніторинг</strong> - відстежувати LTV по когортах щотижня</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
